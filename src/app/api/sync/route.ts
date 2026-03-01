@@ -3,6 +3,79 @@ import { db, products, productVariants, orders, orderLineItems, syncLogs } from 
 import { shopifyGraphQL, PRODUCTS_QUERY, ORDERS_QUERY, extractGid } from '@/lib/shopify';
 import { eq } from 'drizzle-orm';
 
+// TypeScript interfaces for Shopify data - defined at top to avoid circular reference
+interface ShopifyProduct {
+  id: string;
+  title: string;
+  description: string;
+  vendor: string;
+  productType: string;
+  handle: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  variants: {
+    edges: Array<{
+      node: {
+        id: string;
+        title: string;
+        sku: string;
+        barcode: string;
+        price: string;
+        compareAtPrice: string;
+        inventoryQuantity: number;
+        inventoryItem: { id: string };
+        selectedOptions: Array<{ name: string; value: string }>;
+        createdAt: string;
+        updatedAt: string;
+      };
+    }>;
+  };
+}
+
+interface ShopifyOrder {
+  id: string;
+  name: string;
+  totalPriceSet: { shopMoney: { amount: string; currencyCode: string } };
+  subtotalPriceSet: { shopMoney: { amount: string } };
+  totalTaxSet: { shopMoney: { amount: string } };
+  totalDiscountsSet: { shopMoney: { amount: string } };
+  displayFinancialStatus: string;
+  displayFulfillmentStatus: string;
+  shippingAddress: { city: string; province: string; country: string } | null;
+  processedAt: string;
+  createdAt: string;
+  updatedAt: string;
+  lineItems: {
+    edges: Array<{
+      node: {
+        id: string;
+        title: string;
+        variantTitle: string;
+        sku: string;
+        quantity: number;
+        originalUnitPriceSet: { shopMoney: { amount: string } };
+        product: { id: string } | null;
+        variant: { id: string } | null;
+      };
+    }>;
+  };
+}
+
+interface ProductsResponse {
+  products: {
+    pageInfo: { hasNextPage: boolean; endCursor: string };
+    edges: Array<{ node: ShopifyProduct }>;
+  };
+}
+
+interface OrdersResponse {
+  orders: {
+    pageInfo: { hasNextPage: boolean; endCursor: string };
+    edges: Array<{ node: ShopifyOrder }>;
+  };
+}
+
 // POST /api/sync - Trigger a full sync from Shopify
 export async function POST(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -58,12 +131,7 @@ async function syncProducts() {
   let hasMore = true;
 
   while (hasMore) {
-    const data = await shopifyGraphQL<{
-      products: {
-        pageInfo: { hasNextPage: boolean; endCursor: string };
-        edges: Array<{ node: ShopifyProduct }>;
-      };
-    }>(PRODUCTS_QUERY, { first: 50, after: cursor });
+    const data: ProductsResponse = await shopifyGraphQL<ProductsResponse>(PRODUCTS_QUERY, { first: 50, after: cursor });
 
     for (const edge of data.products.edges) {
       try {
@@ -176,12 +244,7 @@ async function syncOrders() {
   let hasMore = true;
 
   while (hasMore) {
-    const data = await shopifyGraphQL<{
-      orders: {
-        pageInfo: { hasNextPage: boolean; endCursor: string };
-        edges: Array<{ node: ShopifyOrder }>;
-      };
-    }>(ORDERS_QUERY, { first: 50, after: cursor });
+    const data: OrdersResponse = await shopifyGraphQL<OrdersResponse>(ORDERS_QUERY, { first: 50, after: cursor });
 
     for (const edge of data.orders.edges) {
       try {
@@ -261,61 +324,3 @@ async function syncOrder(node: ShopifyOrder) {
   }
 }
 
-// TypeScript interfaces for Shopify data
-interface ShopifyProduct {
-  id: string;
-  title: string;
-  description: string;
-  vendor: string;
-  productType: string;
-  handle: string;
-  status: string;
-  createdAt: string;
-  updatedAt: string;
-  variants: {
-    edges: Array<{
-      node: {
-        id: string;
-        title: string;
-        sku: string;
-        barcode: string;
-        price: string;
-        compareAtPrice: string;
-        inventoryQuantity: number;
-        inventoryItem: { id: string };
-        selectedOptions: Array<{ name: string; value: string }>;
-        createdAt: string;
-        updatedAt: string;
-      };
-    }>;
-  };
-}
-
-interface ShopifyOrder {
-  id: string;
-  name: string;
-  totalPriceSet: { shopMoney: { amount: string; currencyCode: string } };
-  subtotalPriceSet: { shopMoney: { amount: string } };
-  totalTaxSet: { shopMoney: { amount: string } };
-  totalDiscountsSet: { shopMoney: { amount: string } };
-  displayFinancialStatus: string;
-  displayFulfillmentStatus: string;
-  shippingAddress: { city: string; province: string; country: string } | null;
-  processedAt: string;
-  createdAt: string;
-  updatedAt: string;
-  lineItems: {
-    edges: Array<{
-      node: {
-        id: string;
-        title: string;
-        variantTitle: string;
-        sku: string;
-        quantity: number;
-        originalUnitPriceSet: { shopMoney: { amount: string } };
-        product: { id: string } | null;
-        variant: { id: string } | null;
-      };
-    }>;
-  };
-}
