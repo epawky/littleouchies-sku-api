@@ -48,5 +48,12 @@ products_backup_*.csv
 odoo-migration-report.txt
 
 # Scripts with credentials (use examples instead)
-odoo-test-auth.js
-odoo-test-password.js
+odoo-*.js
+pick-list-generator.js
+scrape-*.js
+
+# Generated data files
+*.csv
+shopify-products.json
+component-skus.json
+color-images/
