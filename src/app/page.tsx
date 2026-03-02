@@ -219,9 +219,9 @@ export default function Home() {
   const [activeTab, setActiveTab] = useState<TabId>('dashboard');
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-900">
+    <div className="min-h-screen bg-zinc-900">
       {/* Tab Navigation */}
-      <nav className="bg-white dark:bg-zinc-800 border-b border-zinc-200 dark:border-zinc-700 sticky top-0 z-40">
+      <nav className="bg-zinc-800 border-b border-zinc-700 sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center gap-1 overflow-x-auto">
             <TabButton
@@ -301,10 +301,10 @@ function TabButton({
   color?: 'zinc' | 'blue' | 'green' | 'purple';
 }) {
   const colorClasses = {
-    zinc: active ? 'border-zinc-500 text-zinc-900 dark:text-white' : 'border-transparent text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300',
-    blue: active ? 'border-blue-500 text-blue-600' : 'border-transparent text-zinc-500 hover:text-blue-600',
-    green: active ? 'border-green-500 text-green-600' : 'border-transparent text-zinc-500 hover:text-green-600',
-    purple: active ? 'border-purple-500 text-purple-600' : 'border-transparent text-zinc-500 hover:text-purple-600',
+    zinc: active ? 'border-zinc-500 text-zinc-200' : 'border-transparent text-zinc-500 hover:text-zinc-700 hover:text-zinc-300',
+    blue: active ? 'border-blue-600 text-blue-400' : 'border-transparent text-zinc-500 hover:text-blue-400',
+    green: active ? 'border-green-600 text-green-400' : 'border-transparent text-zinc-500 hover:text-green-400',
+    purple: active ? 'border-purple-600 text-purple-400' : 'border-transparent text-zinc-500 hover:text-purple-400',
   };
 
   return (
@@ -323,10 +323,10 @@ function DashboardView({ onNavigate }: { onNavigate: (tab: TabId) => void }) {
   return (
     <div className="max-w-4xl mx-auto">
       <header className="mb-8 text-center">
-        <h1 className="text-3xl font-bold text-zinc-900 dark:text-white mb-2">
+        <h1 className="text-3xl font-bold text-zinc-200 mb-2">
           Little Ouchies SKU Manager
         </h1>
-        <p className="text-zinc-600 dark:text-zinc-400">
+        <p className="text-zinc-400">
           Manage pick lists, sync with Odoo, and track inventory
         </p>
       </header>
@@ -335,22 +335,22 @@ function DashboardView({ onNavigate }: { onNavigate: (tab: TabId) => void }) {
         {/* Pick Lists Card */}
         <button
           onClick={() => onNavigate('pick-lists')}
-          className="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700 p-6 hover:shadow-md hover:border-blue-300 dark:hover:border-blue-600 transition-all group text-left"
+          className="bg-zinc-800 rounded-xl shadow-sm border border-zinc-700 p-6 hover:shadow-md hover:border-blue-700 transition-all group text-left"
         >
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center group-hover:bg-blue-200 dark:group-hover:bg-blue-900/50 transition-colors">
-              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-12 h-12 bg-blue-900/30 rounded-lg flex items-center justify-center group-hover:bg-blue-900/50 transition-colors">
+              <svg className="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
               </svg>
             </div>
             <div className="flex-1">
-              <h2 className="text-xl font-semibold text-zinc-900 dark:text-white mb-1">
+              <h2 className="text-xl font-semibold text-zinc-200 mb-1">
                 Pick Lists
               </h2>
-              <p className="text-zinc-600 dark:text-zinc-400 text-sm mb-3">
+              <p className="text-zinc-400 text-sm mb-3">
                 Generate printable pick lists from unfulfilled orders with filters
               </p>
-              <ul className="text-xs text-zinc-500 dark:text-zinc-500 space-y-1">
+              <ul className="text-xs text-zinc-500 space-y-1">
                 <li>Filter by date, date range, or all orders</li>
                 <li>Filter by US or International</li>
                 <li>Duplicate detection & tracking</li>
@@ -362,22 +362,22 @@ function DashboardView({ onNavigate }: { onNavigate: (tab: TabId) => void }) {
         {/* Odoo Sync Card */}
         <button
           onClick={() => onNavigate('odoo')}
-          className="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700 p-6 hover:shadow-md hover:border-purple-300 dark:hover:border-purple-600 transition-all group text-left"
+          className="bg-zinc-800 rounded-xl shadow-sm border border-zinc-700 p-6 hover:shadow-md hover:border-purple-700 transition-all group text-left"
         >
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center group-hover:bg-purple-200 dark:group-hover:bg-purple-900/50 transition-colors">
-              <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-12 h-12 bg-purple-900/30 rounded-lg flex items-center justify-center group-hover:bg-purple-900/50 transition-colors">
+              <svg className="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
               </svg>
             </div>
             <div className="flex-1">
-              <h2 className="text-xl font-semibold text-zinc-900 dark:text-white mb-1">
+              <h2 className="text-xl font-semibold text-zinc-200 mb-1">
                 Odoo Sync
               </h2>
-              <p className="text-zinc-600 dark:text-zinc-400 text-sm mb-3">
+              <p className="text-zinc-400 text-sm mb-3">
                 Sync products, orders, and images between Shopify and Odoo
               </p>
-              <ul className="text-xs text-zinc-500 dark:text-zinc-500 space-y-1">
+              <ul className="text-xs text-zinc-500 space-y-1">
                 <li>Export products & attributes</li>
                 <li>Sync orders to Odoo</li>
                 <li>Upload product images</li>
@@ -389,22 +389,22 @@ function DashboardView({ onNavigate }: { onNavigate: (tab: TabId) => void }) {
         {/* Quick Pick Card */}
         <button
           onClick={() => onNavigate('quick-pick')}
-          className="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700 p-6 hover:shadow-md hover:border-green-300 dark:hover:border-green-600 transition-all group text-left"
+          className="bg-zinc-800 rounded-xl shadow-sm border border-zinc-700 p-6 hover:shadow-md hover:border-green-700 transition-all group text-left"
         >
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center group-hover:bg-green-200 dark:group-hover:bg-green-900/50 transition-colors">
-              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="w-12 h-12 bg-green-900/30 rounded-lg flex items-center justify-center group-hover:bg-green-900/50 transition-colors">
+              <svg className="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
             </div>
             <div className="flex-1">
-              <h2 className="text-xl font-semibold text-zinc-900 dark:text-white mb-1">
+              <h2 className="text-xl font-semibold text-zinc-200 mb-1">
                 Quick Pick
               </h2>
-              <p className="text-zinc-600 dark:text-zinc-400 text-sm mb-3">
+              <p className="text-zinc-400 text-sm mb-3">
                 Generate a pick list for all unfulfilled orders instantly
               </p>
-              <ul className="text-xs text-zinc-500 dark:text-zinc-500 space-y-1">
+              <ul className="text-xs text-zinc-500 space-y-1">
                 <li>One-click generation</li>
                 <li>Download CSV reports</li>
                 <li>View components needed</li>
@@ -414,21 +414,21 @@ function DashboardView({ onNavigate }: { onNavigate: (tab: TabId) => void }) {
         </button>
 
         {/* Reports Card - Coming Soon */}
-        <div className="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700 p-6 opacity-60">
+        <div className="bg-zinc-800 rounded-xl shadow-sm border border-zinc-700 p-6 opacity-60">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 bg-zinc-100 dark:bg-zinc-700 rounded-lg flex items-center justify-center">
+            <div className="w-12 h-12 bg-zinc-700 rounded-lg flex items-center justify-center">
               <svg className="w-6 h-6 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
             </div>
             <div className="flex-1">
-              <h2 className="text-xl font-semibold text-zinc-500 dark:text-zinc-400 mb-1">
+              <h2 className="text-xl font-semibold text-zinc-400 mb-1">
                 Reports
               </h2>
-              <p className="text-zinc-400 dark:text-zinc-500 text-sm mb-3">
+              <p className="text-zinc-500 text-sm mb-3">
                 Analytics and inventory reports
               </p>
-              <span className="text-xs bg-zinc-200 dark:bg-zinc-700 text-zinc-500 px-2 py-1 rounded">
+              <span className="text-xs bg-zinc-700 text-zinc-500 px-2 py-1 rounded">
                 Coming Soon
               </span>
             </div>
@@ -437,24 +437,24 @@ function DashboardView({ onNavigate }: { onNavigate: (tab: TabId) => void }) {
       </div>
 
       {/* Quick Actions */}
-      <div className="mt-8 bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700 p-6">
-        <h3 className="text-lg font-semibold text-zinc-900 dark:text-white mb-4">Quick Actions</h3>
+      <div className="mt-8 bg-zinc-800 rounded-xl shadow-sm border border-zinc-700 p-6">
+        <h3 className="text-lg font-semibold text-zinc-200 mb-4">Quick Actions</h3>
         <div className="flex flex-wrap gap-3">
           <button
             onClick={() => onNavigate('pick-lists')}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors"
+            className="px-4 py-2 bg-blue-700 hover:bg-blue-600 text-white text-sm font-medium rounded-lg transition-colors"
           >
             Create Pick List
           </button>
           <button
             onClick={() => onNavigate('odoo')}
-            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors"
+            className="px-4 py-2 bg-purple-700 hover:bg-purple-600 text-white text-sm font-medium rounded-lg transition-colors"
           >
             Sync to Odoo
           </button>
           <button
             onClick={() => onNavigate('quick-pick')}
-            className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors"
+            className="px-4 py-2 bg-green-700 hover:bg-green-600 text-white text-sm font-medium rounded-lg transition-colors"
           >
             Quick Pick All
           </button>
@@ -616,21 +616,21 @@ function PickListsView() {
   return (
     <div className="max-w-7xl mx-auto">
       <header className="mb-8">
-        <h1 className="text-3xl font-bold text-zinc-900 dark:text-white mb-2">Pick List Generator</h1>
-        <p className="text-zinc-600 dark:text-zinc-400">Create printable pick lists with duplicate tracking</p>
+        <h1 className="text-3xl font-bold text-zinc-200 mb-2">Pick List Generator</h1>
+        <p className="text-zinc-400">Create printable pick lists with duplicate tracking</p>
       </header>
 
       {/* Filter Controls */}
-      <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 p-6 mb-6">
-        <h2 className="text-lg font-semibold text-zinc-900 dark:text-white mb-4">Filter Orders</h2>
+      <div className="bg-zinc-800 rounded-lg shadow-sm border border-zinc-700 p-6 mb-6">
+        <h2 className="text-lg font-semibold text-zinc-200 mb-4">Filter Orders</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
           <div>
-            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Filter Type</label>
+            <label className="block text-sm font-medium text-zinc-300 mb-1">Filter Type</label>
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value as 'all' | 'date' | 'date_range')}
-              className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white"
+              className="w-full px-3 py-2 border border-zinc-600 rounded-lg bg-zinc-700 text-zinc-200"
             >
               <option value="all">All Unfulfilled</option>
               <option value="date">Specific Date</option>
@@ -640,36 +640,36 @@ function PickListsView() {
 
           {(filterType === 'date' || filterType === 'date_range') && (
             <div>
-              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+              <label className="block text-sm font-medium text-zinc-300 mb-1">
                 {filterType === 'date' ? 'Date' : 'Start Date'}
               </label>
               <input
                 type="date"
                 value={dateStart}
                 onChange={(e) => setDateStart(e.target.value)}
-                className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white"
+                className="w-full px-3 py-2 border border-zinc-600 rounded-lg bg-zinc-700 text-zinc-200"
               />
             </div>
           )}
 
           {filterType === 'date_range' && (
             <div>
-              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">End Date</label>
+              <label className="block text-sm font-medium text-zinc-300 mb-1">End Date</label>
               <input
                 type="date"
                 value={dateEnd}
                 onChange={(e) => setDateEnd(e.target.value)}
-                className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white"
+                className="w-full px-3 py-2 border border-zinc-600 rounded-lg bg-zinc-700 text-zinc-200"
               />
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Region</label>
+            <label className="block text-sm font-medium text-zinc-300 mb-1">Region</label>
             <select
               value={region}
               onChange={(e) => setRegion(e.target.value as 'ALL' | 'US' | 'INTL')}
-              className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white"
+              className="w-full px-3 py-2 border border-zinc-600 rounded-lg bg-zinc-700 text-zinc-200"
             >
               <option value="ALL">All Regions</option>
               <option value="US">US Only</option>
@@ -682,7 +682,7 @@ function PickListsView() {
           <button
             onClick={fetchOrders}
             disabled={loading}
-            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium rounded-lg transition-colors flex items-center gap-2"
+            className="px-6 py-3 bg-blue-700 hover:bg-blue-600 disabled:bg-blue-400 text-white font-medium rounded-lg transition-colors flex items-center gap-2"
           >
             {loading ? (
               <>
@@ -701,7 +701,7 @@ function PickListsView() {
             <button
               onClick={() => handleCreatePickList(false)}
               disabled={creatingPickList}
-              className="px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-medium rounded-lg transition-colors"
+              className="px-6 py-3 bg-green-700 hover:bg-green-600 disabled:bg-green-400 text-white font-medium rounded-lg transition-colors"
             >
               {creatingPickList ? 'Creating...' : 'Create & Print Pick List'}
             </button>
@@ -709,7 +709,7 @@ function PickListsView() {
         </div>
 
         {error && (
-          <div className="mt-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-700 dark:text-red-400">
+          <div className="mt-4 p-4 bg-red-900/20 border border-red-800 rounded-lg text-red-400">
             {error}
           </div>
         )}
@@ -718,29 +718,29 @@ function PickListsView() {
       {/* Results Summary */}
       {data && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-          <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 p-6">
-            <div className="text-3xl font-bold text-blue-600">{data.totalOrders}</div>
-            <div className="text-zinc-600 dark:text-zinc-400">Orders</div>
+          <div className="bg-zinc-800 rounded-lg shadow-sm border border-zinc-700 p-6">
+            <div className="text-3xl font-bold text-blue-400">{data.totalOrders}</div>
+            <div className="text-zinc-400">Orders</div>
           </div>
-          <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 p-6">
-            <div className="text-3xl font-bold text-green-600">{data.pickList.length}</div>
-            <div className="text-zinc-600 dark:text-zinc-400">Unique SKUs</div>
+          <div className="bg-zinc-800 rounded-lg shadow-sm border border-zinc-700 p-6">
+            <div className="text-3xl font-bold text-green-400">{data.pickList.length}</div>
+            <div className="text-zinc-400">Unique SKUs</div>
           </div>
-          <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 p-6">
-            <div className="text-3xl font-bold text-purple-600">{data.totalProducts}</div>
-            <div className="text-zinc-600 dark:text-zinc-400">Total Units</div>
+          <div className="bg-zinc-800 rounded-lg shadow-sm border border-zinc-700 p-6">
+            <div className="text-3xl font-bold text-purple-400">{data.totalProducts}</div>
+            <div className="text-zinc-400">Total Units</div>
           </div>
         </div>
       )}
 
       {/* Pick List Preview */}
       {data && data.pickList.length > 0 && (
-        <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 p-6 mb-6">
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-white mb-4">Pick List Preview</h2>
+        <div className="bg-zinc-800 rounded-lg shadow-sm border border-zinc-700 p-6 mb-6">
+          <h2 className="text-lg font-semibold text-zinc-200 mb-4">Pick List Preview</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left text-zinc-500 dark:text-zinc-400 border-b border-zinc-200 dark:border-zinc-700">
+                <tr className="text-left text-zinc-400 border-b border-zinc-700">
                   <th className="pb-3 pr-4 font-medium">Image</th>
                   <th className="pb-3 pr-4 font-medium">SKU</th>
                   <th className="pb-3 pr-4 font-medium">Product</th>
@@ -748,20 +748,20 @@ function PickListsView() {
                   <th className="pb-3 pr-4 font-medium">QTY</th>
                 </tr>
               </thead>
-              <tbody className="text-zinc-900 dark:text-zinc-100">
+              <tbody className="text-zinc-100">
                 {data.pickList.slice(0, 20).map((item, idx) => (
-                  <tr key={idx} className="border-b border-zinc-100 dark:border-zinc-700/50">
+                  <tr key={idx} className="border-b border-zinc-700/50">
                     <td className="py-2 pr-4">
                       {item.imageUrl ? (
                         <img src={item.imageUrl} alt="" className="w-12 h-12 object-cover rounded" />
                       ) : (
-                        <div className="w-12 h-12 bg-zinc-200 dark:bg-zinc-700 rounded flex items-center justify-center text-zinc-400">?</div>
+                        <div className="w-12 h-12 bg-zinc-700 rounded flex items-center justify-center text-zinc-400">?</div>
                       )}
                     </td>
                     <td className="py-2 pr-4 font-mono text-xs">{item.sku}</td>
                     <td className="py-2 pr-4 max-w-xs truncate">{item.title}</td>
                     <td className="py-2 pr-4">{item.variant}</td>
-                    <td className="py-2 font-mono font-bold text-blue-600">{item.qty}</td>
+                    <td className="py-2 font-mono font-bold text-blue-400">{item.qty}</td>
                   </tr>
                 ))}
               </tbody>
@@ -775,12 +775,12 @@ function PickListsView() {
 
       {/* Existing Pick Lists */}
       {existingLists.length > 0 && (
-        <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 p-6">
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-white mb-4">Previous Pick Lists</h2>
+        <div className="bg-zinc-800 rounded-lg shadow-sm border border-zinc-700 p-6">
+          <h2 className="text-lg font-semibold text-zinc-200 mb-4">Previous Pick Lists</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left text-zinc-500 dark:text-zinc-400 border-b border-zinc-200 dark:border-zinc-700">
+                <tr className="text-left text-zinc-400 border-b border-zinc-700">
                   <th className="pb-3 pr-4 font-medium">Name</th>
                   <th className="pb-3 pr-4 font-medium">Type</th>
                   <th className="pb-3 pr-4 font-medium">Region</th>
@@ -790,9 +790,9 @@ function PickListsView() {
                   <th className="pb-3 font-medium">Created</th>
                 </tr>
               </thead>
-              <tbody className="text-zinc-900 dark:text-zinc-100">
+              <tbody className="text-zinc-100">
                 {existingLists.map((list) => (
-                  <tr key={list.id} className="border-b border-zinc-100 dark:border-zinc-700/50">
+                  <tr key={list.id} className="border-b border-zinc-700/50">
                     <td className="py-2 pr-4 font-medium">{list.name}</td>
                     <td className="py-2 pr-4">{list.filterType}</td>
                     <td className="py-2 pr-4">{list.filterRegion || 'ALL'}</td>
@@ -800,8 +800,8 @@ function PickListsView() {
                     <td className="py-2 pr-4">{list.totalUnits}</td>
                     <td className="py-2 pr-4">
                       <span className={`px-2 py-1 rounded text-xs font-medium ${
-                        list.status === 'active' ? 'bg-green-100 text-green-700' :
-                        list.status === 'completed' ? 'bg-blue-100 text-blue-700' :
+                        list.status === 'active' ? 'bg-green-900/30 text-green-700' :
+                        list.status === 'completed' ? 'bg-blue-900/30 text-blue-700' :
                         'bg-zinc-100 text-zinc-700'
                       }`}>
                         {list.status}
@@ -819,22 +819,22 @@ function PickListsView() {
       {/* Duplicate Warning Modal */}
       {showDuplicateModal && duplicateWarning && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-xl max-w-lg w-full mx-4 p-6">
+          <div className="bg-zinc-800 rounded-lg shadow-xl max-w-lg w-full mx-4 p-6">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center">
-                <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="w-10 h-10 bg-yellow-900/30 rounded-full flex items-center justify-center">
+                <svg className="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                 </svg>
               </div>
-              <h3 className="text-lg font-semibold text-zinc-900 dark:text-white">Duplicate Orders Detected</h3>
+              <h3 className="text-lg font-semibold text-zinc-200">Duplicate Orders Detected</h3>
             </div>
-            <p className="text-zinc-600 dark:text-zinc-400 mb-4">
+            <p className="text-zinc-400 mb-4">
               <strong>{duplicateWarning.duplicates.length}</strong> orders are already included in existing pick lists.
             </p>
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => setShowDuplicateModal(false)}
-                className="px-4 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700"
+                className="px-4 py-2 border border-zinc-600 rounded-lg text-zinc-300 hover:bg-zinc-700"
               >
                 Cancel
               </button>
@@ -857,7 +857,7 @@ function PickListsView() {
             <div className="p-4 border-b flex justify-between items-center">
               <h3 className="text-lg font-semibold">Pick List Ready to Print</h3>
               <div className="flex gap-3">
-                <button onClick={handlePrint} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium flex items-center gap-2">
+                <button onClick={handlePrint} className="px-4 py-2 bg-blue-700 hover:bg-blue-600 text-white rounded-lg font-medium flex items-center gap-2">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
                   </svg>
@@ -1004,23 +1004,23 @@ function QuickPickView() {
   return (
     <div className="max-w-6xl mx-auto">
       <header className="mb-8">
-        <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">Quick Pick</h1>
-        <p className="text-zinc-600 dark:text-zinc-400 mt-1">Generate a pick list for all unfulfilled orders instantly</p>
+        <h1 className="text-3xl font-bold text-zinc-200">Quick Pick</h1>
+        <p className="text-zinc-400 mt-1">Generate a pick list for all unfulfilled orders instantly</p>
       </header>
 
       {!generated && (
-        <div className="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700 p-8 text-center">
-          <div className="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="bg-zinc-800 rounded-xl shadow-sm border border-zinc-700 p-8 text-center">
+          <div className="w-16 h-16 bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg className="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
           </div>
-          <h2 className="text-xl font-semibold text-zinc-900 dark:text-white mb-2">Ready to Generate</h2>
-          <p className="text-zinc-600 dark:text-zinc-400 mb-6">Click the button below to fetch all unfulfilled orders</p>
+          <h2 className="text-xl font-semibold text-zinc-200 mb-2">Ready to Generate</h2>
+          <p className="text-zinc-400 mb-6">Click the button below to fetch all unfulfilled orders</p>
           <button
             onClick={generateQuickPick}
             disabled={loading}
-            className="px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-medium rounded-lg transition-colors"
+            className="px-6 py-3 bg-green-700 hover:bg-green-600 disabled:bg-green-400 text-white font-medium rounded-lg transition-colors"
           >
             {loading ? (
               <span className="flex items-center gap-2">
@@ -1038,30 +1038,30 @@ function QuickPickView() {
       )}
 
       {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
-          <p className="text-red-700 dark:text-red-400">{error}</p>
+        <div className="bg-red-900/20 border border-red-800 rounded-lg p-4 mb-6">
+          <p className="text-red-400">{error}</p>
         </div>
       )}
 
       {generated && (
         <>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700 p-6">
-              <div className="text-3xl font-bold text-zinc-900 dark:text-white">{orders.length}</div>
-              <div className="text-zinc-600 dark:text-zinc-400">Orders</div>
+            <div className="bg-zinc-800 rounded-xl shadow-sm border border-zinc-700 p-6">
+              <div className="text-3xl font-bold text-zinc-200">{orders.length}</div>
+              <div className="text-zinc-400">Orders</div>
             </div>
-            <div className="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700 p-6">
-              <div className="text-3xl font-bold text-zinc-900 dark:text-white">{components.length}</div>
-              <div className="text-zinc-600 dark:text-zinc-400">Unique SKUs</div>
+            <div className="bg-zinc-800 rounded-xl shadow-sm border border-zinc-700 p-6">
+              <div className="text-3xl font-bold text-zinc-200">{components.length}</div>
+              <div className="text-zinc-400">Unique SKUs</div>
             </div>
-            <div className="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700 p-6">
-              <div className="text-3xl font-bold text-zinc-900 dark:text-white">{components.reduce((sum, c) => sum + c.totalQuantity, 0)}</div>
-              <div className="text-zinc-600 dark:text-zinc-400">Total Units</div>
+            <div className="bg-zinc-800 rounded-xl shadow-sm border border-zinc-700 p-6">
+              <div className="text-3xl font-bold text-zinc-200">{components.reduce((sum, c) => sum + c.totalQuantity, 0)}</div>
+              <div className="text-zinc-400">Total Units</div>
             </div>
           </div>
 
           <div className="flex gap-3 mb-6">
-            <button onClick={printPickList} className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors flex items-center gap-2">
+            <button onClick={printPickList} className="px-4 py-2 bg-blue-700 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors flex items-center gap-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
               </svg>
@@ -1073,36 +1073,36 @@ function QuickPickView() {
               </svg>
               Download CSV
             </button>
-            <button onClick={() => { setGenerated(false); setOrders([]); setComponents([]); }} className="px-4 py-2 bg-zinc-200 dark:bg-zinc-700 hover:bg-zinc-300 dark:hover:bg-zinc-600 text-zinc-700 dark:text-zinc-300 font-medium rounded-lg transition-colors">
+            <button onClick={() => { setGenerated(false); setOrders([]); setComponents([]); }} className="px-4 py-2 bg-zinc-700 hover:bg-zinc-600 text-zinc-300 font-medium rounded-lg transition-colors">
               Reset
             </button>
           </div>
 
-          <div className="bg-white dark:bg-zinc-800 rounded-xl shadow-sm border border-zinc-200 dark:border-zinc-700 overflow-hidden">
-            <div className="p-4 border-b border-zinc-200 dark:border-zinc-700">
-              <h2 className="text-lg font-semibold text-zinc-900 dark:text-white">Components Needed</h2>
+          <div className="bg-zinc-800 rounded-xl shadow-sm border border-zinc-700 overflow-hidden">
+            <div className="p-4 border-b border-zinc-700">
+              <h2 className="text-lg font-semibold text-zinc-200">Components Needed</h2>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-zinc-50 dark:bg-zinc-700/50">
+                <thead className="bg-zinc-700/50">
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">SKU</th>
-                    <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Product</th>
-                    <th className="px-4 py-3 text-center text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wider">Quantity</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider">SKU</th>
+                    <th className="px-4 py-3 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider">Product</th>
+                    <th className="px-4 py-3 text-center text-xs font-medium text-zinc-400 uppercase tracking-wider">Quantity</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-200 dark:divide-zinc-700">
+                <tbody className="divide-y divide-zinc-700">
                   {components.slice(0, 50).map((component, idx) => (
-                    <tr key={idx} className="hover:bg-zinc-50 dark:hover:bg-zinc-700/30">
-                      <td className="px-4 py-3 text-sm font-mono text-zinc-900 dark:text-white">{component.sku}</td>
-                      <td className="px-4 py-3 text-sm text-zinc-600 dark:text-zinc-400">{component.title}</td>
-                      <td className="px-4 py-3 text-sm text-center font-bold text-zinc-900 dark:text-white">{component.totalQuantity}</td>
+                    <tr key={idx} className="hover:bg-zinc-700/30">
+                      <td className="px-4 py-3 text-sm font-mono text-zinc-200">{component.sku}</td>
+                      <td className="px-4 py-3 text-sm text-zinc-400">{component.title}</td>
+                      <td className="px-4 py-3 text-sm text-center font-bold text-zinc-200">{component.totalQuantity}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
               {components.length > 50 && (
-                <div className="p-4 text-center text-zinc-500 dark:text-zinc-400 text-sm">Showing 50 of {components.length} components.</div>
+                <div className="p-4 text-center text-zinc-400 text-sm">Showing 50 of {components.length} components.</div>
               )}
             </div>
           </div>
@@ -1322,10 +1322,10 @@ function OdooView() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'updated': return 'text-blue-600 bg-blue-50 dark:bg-blue-900/20';
-      case 'created': return 'text-green-600 bg-green-50 dark:bg-green-900/20';
-      case 'skipped': return 'text-yellow-600 bg-yellow-50 dark:bg-yellow-900/20';
-      case 'error': return 'text-red-600 bg-red-50 dark:bg-red-900/20';
+      case 'updated': return 'text-blue-400 bg-blue-900/20';
+      case 'created': return 'text-green-400 bg-green-900/20';
+      case 'skipped': return 'text-yellow-400 bg-yellow-900/20';
+      case 'error': return 'text-red-400 bg-red-900/20';
       default: return 'text-zinc-600 bg-zinc-50';
     }
   };
@@ -1335,13 +1335,13 @@ function OdooView() {
   return (
     <div className="max-w-6xl mx-auto">
       <header className="mb-8">
-        <h1 className="text-3xl font-bold text-zinc-900 dark:text-white">Odoo Product Sync</h1>
-        <p className="text-zinc-600 dark:text-zinc-400">Upload CSV files to create/update products in Odoo</p>
+        <h1 className="text-3xl font-bold text-zinc-200">Odoo Product Sync</h1>
+        <p className="text-zinc-400">Upload CSV files to create/update products in Odoo</p>
       </header>
 
       {/* Connection Test */}
-      <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 p-6 mb-6">
-        <h2 className="text-lg font-semibold text-zinc-900 dark:text-white mb-4">Connection Status</h2>
+      <div className="bg-zinc-800 rounded-lg shadow-sm border border-zinc-700 p-6 mb-6">
+        <h2 className="text-lg font-semibold text-zinc-200 mb-4">Connection Status</h2>
         <div className="flex items-center gap-4">
           <button
             onClick={testConnection}
@@ -1351,8 +1351,8 @@ function OdooView() {
             {loading ? 'Testing...' : 'Test Connection'}
           </button>
           <div className="flex items-center gap-2">
-            <span className={`w-3 h-3 rounded-full ${connectionStatus === 'connected' ? 'bg-green-500' : connectionStatus === 'error' ? 'bg-red-500' : 'bg-zinc-300'}`} />
-            <span className="text-sm text-zinc-600 dark:text-zinc-400">
+            <span className={`w-3 h-3 rounded-full ${connectionStatus === 'connected' ? 'bg-green-500' : connectionStatus === 'error' ? 'bg-red-700' : 'bg-zinc-300'}`} />
+            <span className="text-sm text-zinc-400">
               {connectionStatus === 'connected' ? 'Connected to Odoo' : connectionStatus === 'error' ? 'Connection failed' : 'Not tested'}
             </span>
           </div>
@@ -1360,18 +1360,18 @@ function OdooView() {
       </div>
 
       {/* Order Sync to Odoo */}
-      <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 p-6 mb-6">
-        <h2 className="text-lg font-semibold text-zinc-900 dark:text-white mb-2">Sync Shopify Orders to Odoo</h2>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">Create Sales Orders in Odoo from Shopify orders.</p>
+      <div className="bg-zinc-800 rounded-lg shadow-sm border border-zinc-700 p-6 mb-6">
+        <h2 className="text-lg font-semibold text-zinc-200 mb-2">Sync Shopify Orders to Odoo</h2>
+        <p className="text-sm text-zinc-400 mb-4">Create Sales Orders in Odoo from Shopify orders.</p>
 
         <div className="space-y-4">
           <div className="flex flex-wrap gap-4">
             <div className="flex-1 min-w-[200px]">
-              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">Order Filter</label>
+              <label className="block text-sm font-medium text-zinc-300 mb-1">Order Filter</label>
               <select
                 value={orderQuery}
                 onChange={(e) => setOrderQuery(e.target.value)}
-                className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white text-sm"
+                className="w-full px-3 py-2 border border-zinc-600 rounded-lg bg-zinc-700 text-zinc-200 text-sm"
               >
                 <option value="fulfillment_status:unfulfilled">Unfulfilled Orders</option>
                 <option value="fulfillment_status:partial">Partially Fulfilled</option>
@@ -1387,7 +1387,7 @@ function OdooView() {
                 onChange={(e) => setAutoConfirmOrders(e.target.checked)}
                 className="w-4 h-4 rounded border-zinc-300"
               />
-              <span className="text-sm text-zinc-700 dark:text-zinc-300">Auto-confirm orders</span>
+              <span className="text-sm text-zinc-300">Auto-confirm orders</span>
             </label>
           </div>
 
@@ -1402,7 +1402,7 @@ function OdooView() {
             <button
               onClick={syncOrdersToOdoo}
               disabled={orderSyncLoading || orderSyncPreview.length === 0}
-              className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-medium rounded-lg transition-colors"
+              className="px-4 py-2 bg-green-700 hover:bg-green-600 disabled:bg-green-400 text-white font-medium rounded-lg transition-colors"
             >
               {orderSyncLoading ? 'Syncing...' : 'Sync to Odoo'}
             </button>
@@ -1411,11 +1411,11 @@ function OdooView() {
 
         {orderSyncPreview.length > 0 && !orderSyncResult && (
           <div className="mt-4">
-            <h3 className="font-medium text-zinc-900 dark:text-white mb-2">Preview: {orderSyncPreview.length} orders found</h3>
-            <div className="max-h-64 overflow-y-auto rounded-lg border border-zinc-200 dark:border-zinc-700">
+            <h3 className="font-medium text-zinc-200 mb-2">Preview: {orderSyncPreview.length} orders found</h3>
+            <div className="max-h-64 overflow-y-auto rounded-lg border border-zinc-700">
               <table className="w-full text-sm">
-                <thead className="sticky top-0 bg-zinc-50 dark:bg-zinc-700">
-                  <tr className="text-left text-zinc-600 dark:text-zinc-300">
+                <thead className="sticky top-0 bg-zinc-700">
+                  <tr className="text-left text-zinc-300">
                     <th className="px-3 py-2 font-medium">Order</th>
                     <th className="px-3 py-2 font-medium">Customer</th>
                     <th className="px-3 py-2 font-medium">Total</th>
@@ -1425,16 +1425,16 @@ function OdooView() {
                 </thead>
                 <tbody>
                   {orderSyncPreview.map((order) => (
-                    <tr key={order.shopifyOrderName} className="border-t border-zinc-200 dark:border-zinc-600">
+                    <tr key={order.shopifyOrderName} className="border-t border-zinc-600">
                       <td className="px-3 py-2 font-mono text-xs">{order.shopifyOrderName}</td>
                       <td className="px-3 py-2">{order.customerName}</td>
                       <td className="px-3 py-2">${parseFloat(order.totalPrice).toFixed(2)}</td>
                       <td className="px-3 py-2">{order.lineItemCount}</td>
                       <td className="px-3 py-2">
                         {order.existsInOdoo ? (
-                          <span className="text-xs px-2 py-0.5 rounded bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400">In Odoo</span>
+                          <span className="text-xs px-2 py-0.5 rounded bg-yellow-900/30 text-yellow-400">In Odoo</span>
                         ) : (
-                          <span className="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">Ready</span>
+                          <span className="text-xs px-2 py-0.5 rounded bg-blue-900/30 text-blue-400">Ready</span>
                         )}
                       </td>
                     </tr>
@@ -1446,19 +1446,19 @@ function OdooView() {
         )}
 
         {orderSyncResult && (
-          <div className="mt-4 p-4 rounded-lg bg-zinc-50 dark:bg-zinc-700/50">
-            <h3 className="font-medium text-zinc-900 dark:text-white mb-3">Sync Results</h3>
+          <div className="mt-4 p-4 rounded-lg bg-zinc-700/50">
+            <h3 className="font-medium text-zinc-200 mb-3">Sync Results</h3>
             <div className="grid grid-cols-3 gap-3 mb-4">
-              <div className="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                <div className="text-2xl font-bold text-green-600">{orderSyncResult.synced}</div>
+              <div className="text-center p-3 bg-green-900/20 rounded-lg">
+                <div className="text-2xl font-bold text-green-400">{orderSyncResult.synced}</div>
                 <div className="text-xs text-zinc-500">Synced</div>
               </div>
-              <div className="text-center p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-                <div className="text-2xl font-bold text-yellow-600">{orderSyncResult.skipped}</div>
+              <div className="text-center p-3 bg-yellow-900/20 rounded-lg">
+                <div className="text-2xl font-bold text-yellow-400">{orderSyncResult.skipped}</div>
                 <div className="text-xs text-zinc-500">Skipped</div>
               </div>
-              <div className="text-center p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                <div className="text-2xl font-bold text-red-600">{orderSyncResult.errors.length}</div>
+              <div className="text-center p-3 bg-red-900/20 rounded-lg">
+                <div className="text-2xl font-bold text-red-400">{orderSyncResult.errors.length}</div>
                 <div className="text-xs text-zinc-500">Errors</div>
               </div>
             </div>
@@ -1467,8 +1467,8 @@ function OdooView() {
       </div>
 
       {/* CSV Type Selection */}
-      <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 p-6 mb-6">
-        <h2 className="text-lg font-semibold text-zinc-900 dark:text-white mb-4">Import Order</h2>
+      <div className="bg-zinc-800 rounded-lg shadow-sm border border-zinc-700 p-6 mb-6">
+        <h2 className="text-lg font-semibold text-zinc-200 mb-4">Import Order</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {(Object.keys(CSV_CONFIGS) as CsvType[]).map((type) => {
             const cfg = CSV_CONFIGS[type];
@@ -1477,10 +1477,10 @@ function OdooView() {
               <button
                 key={type}
                 onClick={() => setSelectedCsvType(type)}
-                className={`p-4 rounded-lg border-2 text-left transition-colors ${isSelected ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' : 'border-zinc-200 dark:border-zinc-700 hover:border-zinc-300 dark:hover:border-zinc-600'}`}
+                className={`p-4 rounded-lg border-2 text-left transition-colors ${isSelected ? 'border-blue-600 bg-blue-900/20' : 'border-zinc-700 hover:border-zinc-600'}`}
               >
-                <div className={`font-semibold mb-1 ${isSelected ? 'text-blue-700 dark:text-blue-400' : 'text-zinc-900 dark:text-white'}`}>{cfg.title}</div>
-                <div className="text-xs text-zinc-500 dark:text-zinc-400">{cfg.description}</div>
+                <div className={`font-semibold mb-1 ${isSelected ? 'text-blue-400' : 'text-zinc-200'}`}>{cfg.title}</div>
+                <div className="text-xs text-zinc-400">{cfg.description}</div>
               </button>
             );
           })}
@@ -1488,38 +1488,38 @@ function OdooView() {
       </div>
 
       {/* CSV Format Guide */}
-      <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 p-6 mb-6">
+      <div className="bg-zinc-800 rounded-lg shadow-sm border border-zinc-700 p-6 mb-6">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-white">{config.title} - CSV Format</h2>
+          <h2 className="text-lg font-semibold text-zinc-200">{config.title} - CSV Format</h2>
           <button
             onClick={() => downloadTemplate(selectedCsvType)}
-            className="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-colors"
+            className="px-3 py-1.5 bg-green-700 hover:bg-green-600 text-white text-sm font-medium rounded-lg transition-colors"
           >
             Download Template
           </button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <h3 className="font-medium text-zinc-900 dark:text-white mb-2">Required Columns</h3>
+            <h3 className="font-medium text-zinc-200 mb-2">Required Columns</h3>
             <div className="flex flex-wrap gap-2 mb-4">
               {config.requiredColumns.map((col) => (
-                <span key={col} className="px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400 rounded text-sm font-mono">{col}</span>
+                <span key={col} className="px-2 py-1 bg-red-900/30 text-red-400 rounded text-sm font-mono">{col}</span>
               ))}
             </div>
           </div>
           <div>
-            <h3 className="font-medium text-zinc-900 dark:text-white mb-2">Example</h3>
-            <pre className="bg-zinc-900 dark:bg-black text-green-400 text-xs p-4 rounded-lg overflow-x-auto">{config.example}</pre>
+            <h3 className="font-medium text-zinc-200 mb-2">Example</h3>
+            <pre className="bg-zinc-950 text-green-400 text-xs p-4 rounded-lg overflow-x-auto">{config.example}</pre>
           </div>
         </div>
       </div>
 
       {/* Color Reference */}
-      <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 mb-6">
+      <div className="bg-zinc-800 rounded-lg shadow-sm border border-zinc-700 mb-6">
         <button onClick={() => setShowColorRef(!showColorRef)} className="w-full p-4 flex items-center justify-between text-left">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded-full bg-gradient-to-r from-red-500 via-purple-500 to-blue-500" />
-            <h2 className="text-lg font-semibold text-zinc-900 dark:text-white">Standard Colors ({colors.length})</h2>
+            <h2 className="text-lg font-semibold text-zinc-200">Standard Colors ({colors.length})</h2>
           </div>
           <svg className={`w-5 h-5 text-zinc-500 transition-transform ${showColorRef ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -1533,15 +1533,15 @@ function OdooView() {
               value={colorSearch}
               onChange={(e) => setColorSearch(e.target.value)}
               placeholder="Search colors..."
-              className="w-full px-3 py-2 mb-3 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white text-sm"
+              className="w-full px-3 py-2 mb-3 border border-zinc-600 rounded-lg bg-zinc-700 text-zinc-200 text-sm"
             />
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 max-h-64 overflow-y-auto">
               {colors
                 .filter(c => c.name.toLowerCase().includes(colorSearch.toLowerCase()) || c.code.toLowerCase().includes(colorSearch.toLowerCase()))
                 .map((color) => (
-                  <div key={color.code} className="flex items-center gap-2 p-2 bg-zinc-50 dark:bg-zinc-700/50 rounded-lg text-sm">
+                  <div key={color.code} className="flex items-center gap-2 p-2 bg-zinc-700/50 rounded-lg text-sm">
                     <div className="min-w-0">
-                      <div className="font-medium text-zinc-900 dark:text-white truncate">{color.name}</div>
+                      <div className="font-medium text-zinc-200 truncate">{color.name}</div>
                       <div className="text-xs text-zinc-500 font-mono">{color.code}</div>
                     </div>
                   </div>
@@ -1552,13 +1552,13 @@ function OdooView() {
       </div>
 
       {/* Product Family Reference */}
-      <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 mb-6">
+      <div className="bg-zinc-800 rounded-lg shadow-sm border border-zinc-700 mb-6">
         <button onClick={() => setShowFamilyRef(!showFamilyRef)} className="w-full p-4 flex items-center justify-between text-left">
           <div className="flex items-center gap-2">
             <svg className="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
             </svg>
-            <h2 className="text-lg font-semibold text-zinc-900 dark:text-white">Product Families ({families.length})</h2>
+            <h2 className="text-lg font-semibold text-zinc-200">Product Families ({families.length})</h2>
           </div>
           <svg className={`w-5 h-5 text-zinc-500 transition-transform ${showFamilyRef ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -1572,12 +1572,12 @@ function OdooView() {
               value={familySearch}
               onChange={(e) => setFamilySearch(e.target.value)}
               placeholder="Search families..."
-              className="w-full px-3 py-2 mb-3 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white text-sm"
+              className="w-full px-3 py-2 mb-3 border border-zinc-600 rounded-lg bg-zinc-700 text-zinc-200 text-sm"
             />
             <div className="overflow-x-auto max-h-64 overflow-y-auto">
               <table className="w-full text-sm">
-                <thead className="sticky top-0 bg-zinc-100 dark:bg-zinc-700">
-                  <tr className="text-left text-zinc-600 dark:text-zinc-300">
+                <thead className="sticky top-0 bg-zinc-700">
+                  <tr className="text-left text-zinc-300">
                     <th className="px-3 py-2 font-medium">Code</th>
                     <th className="px-3 py-2 font-medium">Name</th>
                     <th className="px-3 py-2 font-medium">SKU Prefix</th>
@@ -1588,10 +1588,10 @@ function OdooView() {
                   {families
                     .filter(f => f.name.toLowerCase().includes(familySearch.toLowerCase()) || f.code.toLowerCase().includes(familySearch.toLowerCase()))
                     .map((family) => (
-                      <tr key={family.code} className="border-t border-zinc-200 dark:border-zinc-600">
-                        <td className="px-3 py-2 font-mono text-xs text-purple-600 dark:text-purple-400">{family.code}</td>
-                        <td className="px-3 py-2 font-medium text-zinc-900 dark:text-white">{family.name}</td>
-                        <td className="px-3 py-2 font-mono text-xs text-zinc-600 dark:text-zinc-400">{family.skuPrefix}</td>
+                      <tr key={family.code} className="border-t border-zinc-600">
+                        <td className="px-3 py-2 font-mono text-xs text-purple-400">{family.code}</td>
+                        <td className="px-3 py-2 font-medium text-zinc-200">{family.name}</td>
+                        <td className="px-3 py-2 font-mono text-xs text-zinc-400">{family.skuPrefix}</td>
                         <td className="px-3 py-2 text-xs text-zinc-500">{family.category}</td>
                       </tr>
                     ))}
@@ -1603,9 +1603,9 @@ function OdooView() {
       </div>
 
       {/* Color Image Upload */}
-      <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 p-6 mb-6">
-        <h2 className="text-lg font-semibold text-zinc-900 dark:text-white mb-2">Upload Color Images</h2>
-        <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">Name each file with the exact color name (e.g., &quot;Mermaid.png&quot;).</p>
+      <div className="bg-zinc-800 rounded-lg shadow-sm border border-zinc-700 p-6 mb-6">
+        <h2 className="text-lg font-semibold text-zinc-200 mb-2">Upload Color Images</h2>
+        <p className="text-sm text-zinc-400 mb-4">Name each file with the exact color name (e.g., &quot;Mermaid.png&quot;).</p>
 
         <div className="space-y-4">
           <label className="flex items-center gap-2">
@@ -1615,36 +1615,36 @@ function OdooView() {
               onChange={(e) => setImageUploadDryRun(e.target.checked)}
               className="w-4 h-4 rounded border-zinc-300"
             />
-            <span className="text-sm text-zinc-700 dark:text-zinc-300">Dry Run (preview without uploading)</span>
+            <span className="text-sm text-zinc-300">Dry Run (preview without uploading)</span>
           </label>
 
-          <div className="border-2 border-dashed border-zinc-300 dark:border-zinc-600 rounded-lg p-8 text-center">
+          <div className="border-2 border-dashed border-zinc-600 rounded-lg p-8 text-center">
             <input ref={imageInputRef} type="file" accept="image/*" multiple onChange={handleImageUpload} className="hidden" id="imageUpload" />
             <label htmlFor="imageUpload" className="cursor-pointer flex flex-col items-center gap-2">
               <svg className="w-12 h-12 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
-              <span className="text-zinc-600 dark:text-zinc-400">{loading ? 'Uploading...' : 'Click to select color images'}</span>
+              <span className="text-zinc-400">{loading ? 'Uploading...' : 'Click to select color images'}</span>
             </label>
           </div>
         </div>
 
         {imageUploadResult && (
-          <div className="mt-4 p-4 rounded-lg bg-zinc-50 dark:bg-zinc-700/50">
-            <h3 className="font-medium text-zinc-900 dark:text-white mb-2">
-              Upload Results {imageUploadResult.dryRun && <span className="text-yellow-600">(Dry Run)</span>}
+          <div className="mt-4 p-4 rounded-lg bg-zinc-700/50">
+            <h3 className="font-medium text-zinc-200 mb-2">
+              Upload Results {imageUploadResult.dryRun && <span className="text-yellow-400">(Dry Run)</span>}
             </h3>
             <div className="grid grid-cols-3 gap-2 text-sm">
-              <div className="text-center p-2 bg-white dark:bg-zinc-800 rounded">
-                <div className="text-lg font-bold text-zinc-900 dark:text-white">{imageUploadResult.summary.total}</div>
+              <div className="text-center p-2 bg-zinc-800 rounded">
+                <div className="text-lg font-bold text-zinc-200">{imageUploadResult.summary.total}</div>
                 <div className="text-xs text-zinc-500">Total</div>
               </div>
-              <div className="text-center p-2 bg-green-50 dark:bg-green-900/20 rounded">
-                <div className="text-lg font-bold text-green-600">{imageUploadResult.summary.updated}</div>
+              <div className="text-center p-2 bg-green-900/20 rounded">
+                <div className="text-lg font-bold text-green-400">{imageUploadResult.summary.updated}</div>
                 <div className="text-xs text-zinc-500">Uploaded</div>
               </div>
-              <div className="text-center p-2 bg-red-50 dark:bg-red-900/20 rounded">
-                <div className="text-lg font-bold text-red-600">{imageUploadResult.summary.errors}</div>
+              <div className="text-center p-2 bg-red-900/20 rounded">
+                <div className="text-lg font-bold text-red-400">{imageUploadResult.summary.errors}</div>
                 <div className="text-xs text-zinc-500">Errors</div>
               </div>
             </div>
@@ -1653,8 +1653,8 @@ function OdooView() {
       </div>
 
       {/* CSV Upload */}
-      <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 p-6 mb-6">
-        <h2 className="text-lg font-semibold text-zinc-900 dark:text-white mb-4">Upload {config.title}</h2>
+      <div className="bg-zinc-800 rounded-lg shadow-sm border border-zinc-700 p-6 mb-6">
+        <h2 className="text-lg font-semibold text-zinc-200 mb-4">Upload {config.title}</h2>
 
         <div className="space-y-4">
           <label className="flex items-center gap-2">
@@ -1664,53 +1664,53 @@ function OdooView() {
               onChange={(e) => setDryRun(e.target.checked)}
               className="w-4 h-4 rounded border-zinc-300"
             />
-            <span className="text-sm text-zinc-700 dark:text-zinc-300">Dry Run (preview changes without saving)</span>
+            <span className="text-sm text-zinc-300">Dry Run (preview changes without saving)</span>
           </label>
 
-          <div className="border-2 border-dashed border-zinc-300 dark:border-zinc-600 rounded-lg p-8 text-center">
+          <div className="border-2 border-dashed border-zinc-600 rounded-lg p-8 text-center">
             <input ref={fileInputRef} type="file" accept=".csv" onChange={handleFileUpload} className="hidden" id="csvUpload" />
             <label htmlFor="csvUpload" className="cursor-pointer flex flex-col items-center gap-2">
               <svg className="w-12 h-12 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
               </svg>
-              <span className="text-zinc-600 dark:text-zinc-400">{loading ? 'Processing...' : `Click to upload ${config.title.toLowerCase()} CSV`}</span>
+              <span className="text-zinc-400">{loading ? 'Processing...' : `Click to upload ${config.title.toLowerCase()} CSV`}</span>
             </label>
           </div>
         </div>
       </div>
 
       {error && (
-        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
-          <pre className="text-red-700 dark:text-red-400 whitespace-pre-wrap text-sm">{error}</pre>
+        <div className="bg-red-900/20 border border-red-800 rounded-lg p-4 mb-6">
+          <pre className="text-red-400 whitespace-pre-wrap text-sm">{error}</pre>
         </div>
       )}
 
       {uploadResult && (
-        <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 p-6 mb-6">
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-white mb-4">
+        <div className="bg-zinc-800 rounded-lg shadow-sm border border-zinc-700 p-6 mb-6">
+          <h2 className="text-lg font-semibold text-zinc-200 mb-4">
             Upload Results - {uploadResult.csvType}
-            {uploadResult.dryRun && <span className="text-yellow-600 ml-2">(Dry Run)</span>}
+            {uploadResult.dryRun && <span className="text-yellow-400 ml-2">(Dry Run)</span>}
           </h2>
 
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-            <div className="bg-zinc-50 dark:bg-zinc-700/50 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-zinc-900 dark:text-white">{uploadResult.summary.total}</div>
+            <div className="bg-zinc-700/50 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-zinc-200">{uploadResult.summary.total}</div>
               <div className="text-sm text-zinc-500">Total Rows</div>
             </div>
-            <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-green-600">{uploadResult.summary.created}</div>
+            <div className="bg-green-900/20 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-green-400">{uploadResult.summary.created}</div>
               <div className="text-sm text-zinc-500">Created</div>
             </div>
-            <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-blue-600">{uploadResult.summary.updated}</div>
+            <div className="bg-blue-900/20 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-blue-400">{uploadResult.summary.updated}</div>
               <div className="text-sm text-zinc-500">Updated</div>
             </div>
-            <div className="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-yellow-600">{uploadResult.summary.skipped}</div>
+            <div className="bg-yellow-900/20 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-yellow-400">{uploadResult.summary.skipped}</div>
               <div className="text-sm text-zinc-500">Skipped</div>
             </div>
-            <div className="bg-red-50 dark:bg-red-900/20 rounded-lg p-4 text-center">
-              <div className="text-2xl font-bold text-red-600">{uploadResult.summary.errors}</div>
+            <div className="bg-red-900/20 rounded-lg p-4 text-center">
+              <div className="text-2xl font-bold text-red-400">{uploadResult.summary.errors}</div>
               <div className="text-sm text-zinc-500">Errors</div>
             </div>
           </div>
@@ -1718,21 +1718,21 @@ function OdooView() {
           {uploadResult.results.length > 0 && (
             <div className="max-h-96 overflow-y-auto">
               <table className="w-full text-sm">
-                <thead className="sticky top-0 bg-white dark:bg-zinc-800">
-                  <tr className="text-left text-zinc-500 border-b border-zinc-200 dark:border-zinc-700">
+                <thead className="sticky top-0 bg-zinc-800">
+                  <tr className="text-left text-zinc-500 border-b border-zinc-700">
                     <th className="pb-2 pr-4 font-medium">Name</th>
                     <th className="pb-2 pr-4 font-medium">Status</th>
                     <th className="pb-2 font-medium">Message</th>
                   </tr>
                 </thead>
-                <tbody className="text-zinc-900 dark:text-zinc-100">
+                <tbody className="text-zinc-100">
                   {uploadResult.results.map((result, idx) => (
-                    <tr key={idx} className="border-b border-zinc-100 dark:border-zinc-700/50">
+                    <tr key={idx} className="border-b border-zinc-700/50">
                       <td className="py-2 pr-4 font-mono text-xs">{result.name}</td>
                       <td className="py-2 pr-4">
                         <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusColor(result.status)}`}>{result.status}</span>
                       </td>
-                      <td className="py-2 text-zinc-600 dark:text-zinc-400">{result.message}</td>
+                      <td className="py-2 text-zinc-400">{result.message}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -1743,8 +1743,8 @@ function OdooView() {
       )}
 
       {/* Product Browser */}
-      <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 p-6">
-        <h2 className="text-lg font-semibold text-zinc-900 dark:text-white mb-4">Browse Odoo Products</h2>
+      <div className="bg-zinc-800 rounded-lg shadow-sm border border-zinc-700 p-6">
+        <h2 className="text-lg font-semibold text-zinc-200 mb-4">Browse Odoo Products</h2>
 
         <div className="flex gap-4 mb-4">
           <input
@@ -1752,13 +1752,13 @@ function OdooView() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search by SKU or name..."
-            className="flex-1 px-4 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white"
+            className="flex-1 px-4 py-2 border border-zinc-600 rounded-lg bg-zinc-700 text-zinc-200"
             onKeyDown={(e) => e.key === 'Enter' && fetchProducts()}
           />
           <button
             onClick={fetchProducts}
             disabled={loading}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium rounded-lg transition-colors"
+            className="px-4 py-2 bg-blue-700 hover:bg-blue-600 disabled:bg-blue-400 text-white font-medium rounded-lg transition-colors"
           >
             {loading ? 'Loading...' : 'Search'}
           </button>
@@ -1768,7 +1768,7 @@ function OdooView() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="text-left text-zinc-500 border-b border-zinc-200 dark:border-zinc-700">
+                <tr className="text-left text-zinc-500 border-b border-zinc-700">
                   <th className="pb-2 pr-4 font-medium">SKU</th>
                   <th className="pb-2 pr-4 font-medium">Name</th>
                   <th className="pb-2 pr-4 font-medium">Price</th>
@@ -1776,9 +1776,9 @@ function OdooView() {
                   <th className="pb-2 font-medium">Category</th>
                 </tr>
               </thead>
-              <tbody className="text-zinc-900 dark:text-zinc-100">
+              <tbody className="text-zinc-100">
                 {products.map((product) => (
-                  <tr key={product.id} className="border-b border-zinc-100 dark:border-zinc-700/50">
+                  <tr key={product.id} className="border-b border-zinc-700/50">
                     <td className="py-2 pr-4 font-mono text-xs">{product.default_code || '-'}</td>
                     <td className="py-2 pr-4">{product.name}</td>
                     <td className="py-2 pr-4">${product.list_price.toFixed(2)}</td>
