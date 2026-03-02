@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
-import { shopifyGraphQL } from '@/lib/shopify';
+import { shopifyGraphQL, extractGid } from '@/lib/shopify';
+import { db, pickLists, pickListOrders, pickListItems } from '@/db';
+import { eq, and, gte, lte, desc, inArray, or } from 'drizzle-orm';
 
 // Color codes for component mapping
 const colorCodes: Record<string, string> = {
@@ -34,6 +36,9 @@ interface OrderNode {
   createdAt: string;
   displayFinancialStatus: string;
   displayFulfillmentStatus: string;
+  shippingAddress?: {
+    countryCodeV2: string;
+  } | null;
   lineItems: {
     edges: Array<{
       node: {
@@ -43,6 +48,7 @@ interface OrderNode {
         sku: string | null;
         quantity: number;
         product: { id: string; title: string } | null;
+        image?: { url: string } | null;
       };
     }>;
   };
@@ -65,6 +71,7 @@ interface ProductTotal {
   family: string;
   color: string | null;
   qty: number;
+  imageUrl?: string;
 }
 
 interface ComponentTotal {
@@ -75,14 +82,17 @@ interface ComponentTotal {
 }
 
 interface OrderDetail {
+  shopifyId: string;
   name: string;
   date: string;
   status: string;
+  region: string;
   items: Array<{
     title: string;
     variant: string;
     sku: string;
     qty: number;
+    imageUrl?: string;
   }>;
 }
 
@@ -100,6 +110,9 @@ const UNFULFILLED_ORDERS_QUERY = `
           createdAt
           displayFinancialStatus
           displayFulfillmentStatus
+          shippingAddress {
+            countryCodeV2
+          }
           lineItems(first: 50) {
             edges {
               node {
@@ -111,6 +124,9 @@ const UNFULFILLED_ORDERS_QUERY = `
                 product {
                   id
                   title
+                }
+                image {
+                  url
                 }
               }
             }
@@ -184,11 +200,32 @@ function getComponentSku(family: string, color: string | null): string {
   return `CMP-${family}-BODY-${colorCode}`;
 }
 
-async function fetchUnfulfilledOrders(): Promise<OrderNode[]> {
+function getRegion(countryCode: string | null | undefined): string {
+  if (!countryCode) return 'US';
+  return countryCode === 'US' ? 'US' : 'INTL';
+}
+
+interface FetchOrdersParams {
+  dateStart?: string;
+  dateEnd?: string;
+  region?: 'US' | 'INTL' | 'ALL';
+}
+
+async function fetchUnfulfilledOrders(params: FetchOrdersParams = {}): Promise<OrderNode[]> {
   const allOrders: OrderNode[] = [];
   let hasNextPage = true;
   let cursor: string | null = null;
-  const queryString = "(fulfillment_status:unfulfilled OR fulfillment_status:partial) AND financial_status:paid";
+
+  let queryString = "(fulfillment_status:unfulfilled OR fulfillment_status:partial) AND financial_status:paid";
+
+  // Add date filters if provided
+  if (params.dateStart && params.dateEnd) {
+    queryString += ` AND created_at:>='${params.dateStart}' AND created_at:<='${params.dateEnd}'`;
+  } else if (params.dateStart) {
+    queryString += ` AND created_at:>='${params.dateStart}'`;
+  } else if (params.dateEnd) {
+    queryString += ` AND created_at:<='${params.dateEnd}'`;
+  }
 
   while (hasNextPage) {
     const variables: { first: number; after: string | null; query: string } = {
@@ -200,7 +237,16 @@ async function fetchUnfulfilledOrders(): Promise<OrderNode[]> {
     const response = await shopifyGraphQL<OrdersResponse>(UNFULFILLED_ORDERS_QUERY, variables);
 
     const ordersData = response.orders;
-    const orders = ordersData.edges.map(e => e.node);
+    let orders = ordersData.edges.map(e => e.node);
+
+    // Filter by region if specified
+    if (params.region && params.region !== 'ALL') {
+      orders = orders.filter(order => {
+        const orderRegion = getRegion(order.shippingAddress?.countryCodeV2);
+        return orderRegion === params.region;
+      });
+    }
+
     allOrders.push(...orders);
 
     hasNextPage = ordersData.pageInfo.hasNextPage;
@@ -210,9 +256,61 @@ async function fetchUnfulfilledOrders(): Promise<OrderNode[]> {
   return allOrders;
 }
 
-export async function GET() {
+// GET /api/pick-lists - List existing pick lists or fetch orders for new pick list
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const action = searchParams.get('action');
+
   try {
-    const orders = await fetchUnfulfilledOrders();
+    if (action === 'list') {
+      // List all pick lists
+      const lists = await db.select()
+        .from(pickLists)
+        .orderBy(desc(pickLists.createdAt));
+
+      return NextResponse.json({ success: true, pickLists: lists });
+    }
+
+    if (action === 'check-duplicates') {
+      // Check if any of the provided order IDs are already in a pick list
+      const orderIds = searchParams.get('orderIds')?.split(',') || [];
+
+      if (orderIds.length === 0) {
+        return NextResponse.json({ success: true, duplicates: [], existingPickLists: [] });
+      }
+
+      const existingOrders = await db.select()
+        .from(pickListOrders)
+        .where(inArray(pickListOrders.shopifyOrderId, orderIds));
+
+      if (existingOrders.length === 0) {
+        return NextResponse.json({ success: true, duplicates: [], existingPickLists: [] });
+      }
+
+      // Get the pick lists that contain these orders
+      const pickListIds = [...new Set(existingOrders.map(o => o.pickListId))];
+      const existingLists = await db.select()
+        .from(pickLists)
+        .where(
+          and(
+            inArray(pickLists.id, pickListIds),
+            or(eq(pickLists.status, 'active'), eq(pickLists.status, 'completed'))
+          )
+        );
+
+      return NextResponse.json({
+        success: true,
+        duplicates: existingOrders.map(o => o.shopifyOrderId),
+        existingPickLists: existingLists
+      });
+    }
+
+    // Default: fetch unfulfilled orders for creating a new pick list
+    const dateStart = searchParams.get('dateStart') || undefined;
+    const dateEnd = searchParams.get('dateEnd') || undefined;
+    const region = (searchParams.get('region') as 'US' | 'INTL' | 'ALL') || 'ALL';
+
+    const orders = await fetchUnfulfilledOrders({ dateStart, dateEnd, region });
 
     if (orders.length === 0) {
       return NextResponse.json({
@@ -229,10 +327,13 @@ export async function GET() {
     const orderDetails: OrderDetail[] = [];
 
     for (const order of orders) {
+      const orderRegion = getRegion(order.shippingAddress?.countryCodeV2);
       const orderInfo: OrderDetail = {
+        shopifyId: extractGid(order.id),
         name: order.name,
         date: new Date(order.createdAt).toLocaleDateString(),
         status: order.displayFulfillmentStatus,
+        region: orderRegion,
         items: []
       };
 
@@ -242,6 +343,7 @@ export async function GET() {
         const variantTitle = item.variantTitle || 'Default';
         const sku = item.sku || 'NO-SKU';
         const qty = item.quantity;
+        const imageUrl = item.image?.url;
 
         // Skip gift cards
         if (productTitle.toLowerCase().includes('gift card')) continue;
@@ -258,7 +360,8 @@ export async function GET() {
             variant: variantTitle,
             family: family,
             color: color,
-            qty: 0
+            qty: 0,
+            imageUrl: imageUrl
           };
         }
         productTotals[productKey].qty += qty;
@@ -281,7 +384,8 @@ export async function GET() {
           title: productTitle,
           variant: variantTitle,
           sku: sku,
-          qty: qty
+          qty: qty,
+          imageUrl: imageUrl
         });
       }
 
@@ -315,7 +419,145 @@ export async function GET() {
       orderDetails: orderDetails
     });
   } catch (error) {
-    console.error('Error generating pick lists:', error);
+    console.error('Error in pick-lists API:', error);
+    return NextResponse.json(
+      { success: false, error: error instanceof Error ? error.message : 'Unknown error' },
+      { status: 500 }
+    );
+  }
+}
+
+// POST /api/pick-lists - Create a new pick list
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    const {
+      name,
+      filterType,
+      filterDateStart,
+      filterDateEnd,
+      filterRegion,
+      orderDetails,
+      forceCreate = false
+    } = body;
+
+    if (!orderDetails || orderDetails.length === 0) {
+      return NextResponse.json(
+        { success: false, error: 'No orders provided' },
+        { status: 400 }
+      );
+    }
+
+    // Check for duplicates unless forceCreate is true
+    if (!forceCreate) {
+      const orderIds = orderDetails.map((o: OrderDetail) => o.shopifyId);
+      const existingOrders = await db.select()
+        .from(pickListOrders)
+        .where(inArray(pickListOrders.shopifyOrderId, orderIds));
+
+      if (existingOrders.length > 0) {
+        const pickListIds = [...new Set(existingOrders.map(o => o.pickListId))];
+        const existingLists = await db.select()
+          .from(pickLists)
+          .where(
+            and(
+              inArray(pickLists.id, pickListIds),
+              or(eq(pickLists.status, 'active'), eq(pickLists.status, 'completed'))
+            )
+          );
+
+        return NextResponse.json({
+          success: false,
+          error: 'duplicate_orders',
+          duplicates: existingOrders.map(o => o.shopifyOrderId),
+          existingPickLists: existingLists
+        }, { status: 409 });
+      }
+    }
+
+    // Calculate totals
+    let totalLineItems = 0;
+    let totalUnits = 0;
+    for (const order of orderDetails) {
+      totalLineItems += order.items.length;
+      totalUnits += order.items.reduce((sum: number, item: { qty: number }) => sum + item.qty, 0);
+    }
+
+    // Create the pick list
+    const [newPickList] = await db.insert(pickLists).values({
+      name: name || `Pick List - ${new Date().toLocaleDateString()}`,
+      filterType: filterType || 'all',
+      filterDateStart: filterDateStart ? new Date(filterDateStart) : null,
+      filterDateEnd: filterDateEnd ? new Date(filterDateEnd) : null,
+      filterRegion: filterRegion || 'ALL',
+      totalOrders: orderDetails.length,
+      totalLineItems,
+      totalUnits,
+      status: 'active'
+    }).returning();
+
+    // Insert pick list orders
+    for (const order of orderDetails) {
+      await db.insert(pickListOrders).values({
+        pickListId: newPickList.id,
+        shopifyOrderId: order.shopifyId,
+        orderName: order.name,
+        orderDate: new Date(order.date)
+      });
+
+      // Insert pick list items
+      for (const item of order.items) {
+        await db.insert(pickListItems).values({
+          pickListId: newPickList.id,
+          shopifyOrderId: order.shopifyId,
+          sku: item.sku,
+          productTitle: item.title,
+          variantTitle: item.variant,
+          quantity: item.qty,
+          imageUrl: item.imageUrl
+        });
+      }
+    }
+
+    return NextResponse.json({
+      success: true,
+      pickList: newPickList
+    });
+  } catch (error) {
+    console.error('Error creating pick list:', error);
+    return NextResponse.json(
+      { success: false, error: error instanceof Error ? error.message : 'Unknown error' },
+      { status: 500 }
+    );
+  }
+}
+
+// PATCH /api/pick-lists - Update pick list status
+export async function PATCH(request: Request) {
+  try {
+    const body = await request.json();
+    const { id, status, printedAt, completedAt } = body;
+
+    if (!id) {
+      return NextResponse.json(
+        { success: false, error: 'Pick list ID required' },
+        { status: 400 }
+      );
+    }
+
+    const updateData: Record<string, unknown> = { updatedAt: new Date() };
+    if (status) updateData.status = status;
+    if (printedAt) updateData.printedAt = new Date(printedAt);
+    if (completedAt) updateData.completedAt = new Date(completedAt);
+
+    const [updated] = await db.update(pickLists)
+      .set(updateData)
+      .where(eq(pickLists.id, id))
+      .returning();
+
+    return NextResponse.json({ success: true, pickList: updated });
+  } catch (error) {
+    console.error('Error updating pick list:', error);
     return NextResponse.json(
       { success: false, error: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }

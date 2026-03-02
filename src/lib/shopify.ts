@@ -105,8 +105,8 @@ export const PRODUCTS_QUERY = `
 `;
 
 export const ORDERS_QUERY = `
-  query GetOrders($first: Int!, $after: String) {
-    orders(first: $first, after: $after) {
+  query GetOrders($first: Int!, $after: String, $query: String) {
+    orders(first: $first, after: $after, query: $query) {
       pageInfo {
         hasNextPage
         endCursor
@@ -115,6 +115,8 @@ export const ORDERS_QUERY = `
         node {
           id
           name
+          email
+          phone
           totalPriceSet {
             shopMoney {
               amount
@@ -138,10 +140,37 @@ export const ORDERS_QUERY = `
           }
           displayFinancialStatus
           displayFulfillmentStatus
+          customer {
+            id
+            firstName
+            lastName
+            email
+            phone
+          }
           shippingAddress {
+            firstName
+            lastName
+            address1
+            address2
             city
             province
+            provinceCode
+            zip
             country
+            countryCodeV2
+            phone
+          }
+          billingAddress {
+            firstName
+            lastName
+            address1
+            address2
+            city
+            province
+            provinceCode
+            zip
+            country
+            countryCodeV2
           }
           processedAt
           createdAt

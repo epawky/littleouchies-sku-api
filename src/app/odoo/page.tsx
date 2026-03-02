@@ -10,6 +10,33 @@ interface ColorInfo {
   code: string;
 }
 
+interface OrderSyncPreview {
+  shopifyOrderName: string;
+  customerName: string;
+  email: string | null;
+  totalPrice: string;
+  financialStatus: string;
+  fulfillmentStatus: string;
+  lineItemCount: number;
+  existsInOdoo: boolean;
+  odooOrderName?: string;
+}
+
+interface OrderSyncDetail {
+  shopifyOrderName: string;
+  odooOrderId?: number;
+  status: 'created' | 'skipped' | 'error';
+  reason?: string;
+}
+
+interface OrderSyncResult {
+  success: boolean;
+  synced: number;
+  skipped: number;
+  errors: string[];
+  details: OrderSyncDetail[];
+}
+
 interface ImageUploadResult {
   name: string;
   status: string;
@@ -137,6 +164,11 @@ export default function OdooPage() {
   const [familySearch, setFamilySearch] = useState('');
   const [imageUploadResult, setImageUploadResult] = useState<ImageUploadResponse | null>(null);
   const [imageUploadDryRun, setImageUploadDryRun] = useState(true);
+  const [orderSyncPreview, setOrderSyncPreview] = useState<OrderSyncPreview[]>([]);
+  const [orderSyncResult, setOrderSyncResult] = useState<OrderSyncResult | null>(null);
+  const [orderSyncLoading, setOrderSyncLoading] = useState(false);
+  const [orderQuery, setOrderQuery] = useState('fulfillment_status:unfulfilled');
+  const [autoConfirmOrders, setAutoConfirmOrders] = useState(true);
 
   useEffect(() => {
     // Fetch colors and families on mount
@@ -277,6 +309,51 @@ export default function OdooPage() {
     URL.revokeObjectURL(link.href);
   };
 
+  const previewOrderSync = async () => {
+    setOrderSyncLoading(true);
+    setError(null);
+    setOrderSyncPreview([]);
+    try {
+      const params = new URLSearchParams({ query: orderQuery, limit: '50' });
+      const response = await fetch(`/api/sync/odoo-orders?${params}`);
+      const data = await response.json();
+      if (data.success) {
+        setOrderSyncPreview(data.orders);
+      } else {
+        setError(data.error);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to preview orders');
+    } finally {
+      setOrderSyncLoading(false);
+    }
+  };
+
+  const syncOrdersToOdoo = async () => {
+    setOrderSyncLoading(true);
+    setError(null);
+    setOrderSyncResult(null);
+    try {
+      const params = new URLSearchParams({
+        query: orderQuery,
+        confirm: String(autoConfirmOrders),
+        limit: '50',
+      });
+      const response = await fetch(`/api/sync/odoo-orders?${params}`, {
+        method: 'POST',
+      });
+      const data = await response.json();
+      setOrderSyncResult(data);
+      if (!data.success) {
+        setError(data.error);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to sync orders');
+    } finally {
+      setOrderSyncLoading(false);
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'updated': return 'text-blue-600 bg-blue-50 dark:bg-blue-900/20';
@@ -341,6 +418,160 @@ export default function OdooPage() {
               </span>
             </div>
           </div>
+        </div>
+
+        {/* Order Sync to Odoo */}
+        <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-sm border border-zinc-200 dark:border-zinc-700 p-6 mb-6">
+          <h2 className="text-lg font-semibold text-zinc-900 dark:text-white mb-2">Sync Shopify Orders to Odoo</h2>
+          <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
+            Create Sales Orders in Odoo from Shopify orders. Orders are matched by SKU.
+          </p>
+
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-4">
+              <div className="flex-1 min-w-[200px]">
+                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
+                  Order Filter
+                </label>
+                <select
+                  value={orderQuery}
+                  onChange={(e) => setOrderQuery(e.target.value)}
+                  className="w-full px-3 py-2 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-700 text-zinc-900 dark:text-white text-sm"
+                >
+                  <option value="fulfillment_status:unfulfilled">Unfulfilled Orders</option>
+                  <option value="fulfillment_status:partial">Partially Fulfilled</option>
+                  <option value="financial_status:paid">Paid Orders</option>
+                  <option value="created_at:>2024-01-01">Orders Since 2024</option>
+                  <option value="">All Orders</option>
+                </select>
+              </div>
+
+              <label className="flex items-center gap-2 self-end pb-2">
+                <input
+                  type="checkbox"
+                  checked={autoConfirmOrders}
+                  onChange={(e) => setAutoConfirmOrders(e.target.checked)}
+                  className="w-4 h-4 rounded border-zinc-300"
+                />
+                <span className="text-sm text-zinc-700 dark:text-zinc-300">
+                  Auto-confirm orders
+                </span>
+              </label>
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                onClick={previewOrderSync}
+                disabled={orderSyncLoading}
+                className="px-4 py-2 bg-zinc-600 hover:bg-zinc-700 disabled:bg-zinc-400 text-white font-medium rounded-lg transition-colors"
+              >
+                {orderSyncLoading ? 'Loading...' : 'Preview Orders'}
+              </button>
+              <button
+                onClick={syncOrdersToOdoo}
+                disabled={orderSyncLoading || orderSyncPreview.length === 0}
+                className="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 text-white font-medium rounded-lg transition-colors"
+              >
+                {orderSyncLoading ? 'Syncing...' : 'Sync to Odoo'}
+              </button>
+            </div>
+          </div>
+
+          {/* Order Preview */}
+          {orderSyncPreview.length > 0 && !orderSyncResult && (
+            <div className="mt-4">
+              <h3 className="font-medium text-zinc-900 dark:text-white mb-2">
+                Preview: {orderSyncPreview.length} orders found
+              </h3>
+              <div className="max-h-64 overflow-y-auto rounded-lg border border-zinc-200 dark:border-zinc-700">
+                <table className="w-full text-sm">
+                  <thead className="sticky top-0 bg-zinc-50 dark:bg-zinc-700">
+                    <tr className="text-left text-zinc-600 dark:text-zinc-300">
+                      <th className="px-3 py-2 font-medium">Order</th>
+                      <th className="px-3 py-2 font-medium">Customer</th>
+                      <th className="px-3 py-2 font-medium">Total</th>
+                      <th className="px-3 py-2 font-medium">Items</th>
+                      <th className="px-3 py-2 font-medium">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {orderSyncPreview.map((order) => (
+                      <tr key={order.shopifyOrderName} className="border-t border-zinc-200 dark:border-zinc-600">
+                        <td className="px-3 py-2 font-mono text-xs">{order.shopifyOrderName}</td>
+                        <td className="px-3 py-2">{order.customerName}</td>
+                        <td className="px-3 py-2">${parseFloat(order.totalPrice).toFixed(2)}</td>
+                        <td className="px-3 py-2">{order.lineItemCount}</td>
+                        <td className="px-3 py-2">
+                          {order.existsInOdoo ? (
+                            <span className="text-xs px-2 py-0.5 rounded bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400">
+                              In Odoo: {order.odooOrderName}
+                            </span>
+                          ) : (
+                            <span className="text-xs px-2 py-0.5 rounded bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
+                              Ready to sync
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* Sync Results */}
+          {orderSyncResult && (
+            <div className="mt-4 p-4 rounded-lg bg-zinc-50 dark:bg-zinc-700/50">
+              <h3 className="font-medium text-zinc-900 dark:text-white mb-3">
+                Sync Results
+              </h3>
+              <div className="grid grid-cols-3 gap-3 mb-4">
+                <div className="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                  <div className="text-2xl font-bold text-green-600">{orderSyncResult.synced}</div>
+                  <div className="text-xs text-zinc-500">Synced</div>
+                </div>
+                <div className="text-center p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                  <div className="text-2xl font-bold text-yellow-600">{orderSyncResult.skipped}</div>
+                  <div className="text-xs text-zinc-500">Skipped</div>
+                </div>
+                <div className="text-center p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                  <div className="text-2xl font-bold text-red-600">{orderSyncResult.errors.length}</div>
+                  <div className="text-xs text-zinc-500">Errors</div>
+                </div>
+              </div>
+
+              {orderSyncResult.errors.length > 0 && (
+                <div className="mb-3 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                  <div className="text-sm font-medium text-red-700 dark:text-red-400 mb-1">Errors:</div>
+                  {orderSyncResult.errors.slice(0, 10).map((err, idx) => (
+                    <div key={idx} className="text-xs text-red-600 dark:text-red-400">{err}</div>
+                  ))}
+                </div>
+              )}
+
+              <div className="max-h-48 overflow-y-auto">
+                {orderSyncResult.details.map((detail, idx) => (
+                  <div key={idx} className="text-xs py-1.5 flex items-center gap-2 border-b border-zinc-200 dark:border-zinc-600 last:border-0">
+                    <span className={`px-1.5 py-0.5 rounded font-medium ${
+                      detail.status === 'created' ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' :
+                      detail.status === 'skipped' ? 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                      'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                    }`}>
+                      {detail.status}
+                    </span>
+                    <span className="font-mono">{detail.shopifyOrderName}</span>
+                    {detail.odooOrderId && (
+                      <span className="text-zinc-500">→ Odoo #{detail.odooOrderId}</span>
+                    )}
+                    {detail.reason && (
+                      <span className="text-zinc-500 ml-auto">{detail.reason}</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* CSV Type Selection */}
